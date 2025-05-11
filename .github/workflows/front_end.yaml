@@ -39,4 +39,4 @@ jobs:
     
     - name: upload end 
       run: |
-        echo end
+        echo end upload
