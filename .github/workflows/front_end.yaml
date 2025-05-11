@@ -35,4 +35,4 @@ jobs:
     
     - name: Upload to S3
       run: |
-        aws s3 cp front_end s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/Front_end
+        aws s3 cp front_end/index.html s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/Front_end
