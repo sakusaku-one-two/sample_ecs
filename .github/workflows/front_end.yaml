@@ -19,7 +19,9 @@ jobs:
   deploy:
     name: Deploy to S3
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: ./front_end
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -33,9 +35,16 @@ jobs:
         role-to-assume: ${{env.AWS_ASSUME_ROLE_ARN}}
         aws-region: ${{ env.AWS_REGION }}
     
+    
+    - uses: actions/setup-node-v4
+      with:
+        node-version: "latest"
+    - run: npm ci
+    - run: npm run build
+    
     - name: Upload to S3
       run: |
-        aws s3 cp front_end/index.html s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/Front_end
+        aws s3 cp front_end/dist s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/Front_end
     
     - name: upload end 
       run: |
