@@ -74,8 +74,8 @@ jobs:
           role-to-assume: ${{env.AWS_ASSUME_ROLE_ARN}}
           role-to-duration-seconds: 1800
           aws-region: ${{ env.AWS_REGION }}
-
-      - uses: aws-acitons/amazon-ecr-login@latest
+          
+      - uses: aws-actions/amazon-ecr-login@latest
         id: amazon-ecr-login 
       
       - name: docker iamge build
@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: api-image-uri
-          path: api/api_1/api_image-uri.txt
+          path: api/api_1/api-image-uri.txt
 
 
   deployTask:
