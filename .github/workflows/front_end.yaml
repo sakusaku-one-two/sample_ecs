@@ -74,8 +74,8 @@ jobs:
           role-to-assume: ${{env.AWS_ASSUME_ROLE_ARN}}
           role-to-duration-seconds: 1800
           aws-region: ${{ env.AWS_REGION }}
-          
-      - uses: aws-actions/amazon-ecr-login@latest
+      
+      - uses: aws-actions/amazon-ecr-login@v2
         id: amazon-ecr-login 
       
       - name: docker iamge build
