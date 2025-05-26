@@ -1,9 +1,13 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.24.0
+FROM golang:1.24.0 AS build
 
 # Set destination for COPY
-WORKDIR /cmd/app 
+
+WORKDIR /build
+
+# RUN adduser -D appuser
+# USER appuser
 
 COPY . .
 
@@ -16,13 +20,24 @@ RUN go mod download
 
 # Build
 # RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
-RUN go build -o /docker-gs-ping ./cmd/app
+RUN go build -o ./docker-gs-ping ./cmd/app
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can document in the Dockerfile what ports
 # the application is going to listen on by default.
 # https://docs.docker.com/reference/dockerfile/#expose
+FROM golang:1.24.0 AS deploy
+
+WORKDIR /app
+
+COPY --from=build /build/docker-gs-ping .
+
+RUN ls -la
+
+RUN chmod +x ./docker-gs-ping
+
 EXPOSE 8080
 
 # Run
-CMD ["/docker-gs-ping"]
+
+CMD ["./docker-gs-ping"]
