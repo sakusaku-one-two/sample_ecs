@@ -79,7 +79,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       
       - uses: aws-actions/amazon-ecr-login@v2
-        id: amazon-ecr-login 
+        id: login-ecr
       
       - name: docker iamge build
         run: docker image build -t temp_api_a_image:latest .
@@ -87,7 +87,7 @@ jobs:
 
       - name: push api server image to ecr
         env:
-          ECR_REGISTRY: ${{ steps.amazon-ecr-login.output.registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITROY: ${{ secrets.ECR_REPOSITROY_NAME }}
         run: |
           docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
