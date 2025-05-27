@@ -87,7 +87,7 @@ jobs:
 
       - name: push api server image to ecr
         env:
-          ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.amazon-ecr-login.output.registry }}
           ECR_REPOSITROY: ${{ secrets.ECR_REPOSITROY_NAME }}
         run: |
           docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
