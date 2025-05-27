@@ -10,6 +10,8 @@ env:
   AWS_REGION: ap-northeast-1
   AWS_ASSUME_ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:${{secrets.ACTION_IAM_ASSUME_ROLE_NAME}}
   ECS_TASK_DEFINTION_API: api/api_1/task_def.json
+  ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
 
 
 permissions:
@@ -85,11 +87,14 @@ jobs:
 
       - name: push api server image to ecr
         env:
-          ECR_REGISTRY: ${{ steps.amazon-ecr-login.outpus.registry }}
+          ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
           ECR_REPOSITROY: ${{ secrets.ECR_REPOSITROY_NAME }}
         run: |
-          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha}}
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }} 
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
+          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+          
+          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
           echo "$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}" > api-image-uri.txt
 
 
