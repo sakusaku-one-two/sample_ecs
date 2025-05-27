@@ -95,6 +95,7 @@ jobs:
           echo "$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}" > api-image-uri.txt
 
 
+
       - name: upload image uri name file as an artifact
         uses: actions/upload-artifact@v4
         with:
