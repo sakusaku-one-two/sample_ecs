@@ -88,9 +88,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.amazon-ecr-login.outpus.registry }}
           ECR_REPOSITROY: ${{ secrets.ECR_REPOSITROY_NAME }}
         run: |
-          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha}} \
+          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha}}
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }} 
-          echo $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }} > api-image-uri.txt
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}" > api-image-uri.txt
 
 
       - name: upload image uri name file as an artifact
