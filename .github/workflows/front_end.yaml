@@ -88,11 +88,11 @@ jobs:
       - name: push api server image to ecr
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITROY: ${{ secrets.ECR_REPOSITROY_NAME }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
         run: |
-          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITROY:${{ github.sha }}
-          docker push $ECR_REGISTRY/$ECR_REPOSITROY:${{ github.sha }}
-          echo "$ECR_REGISTRY/$ECR_REPOSITROY:${{ github.sha }}" > api-image-uri.txt
+          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}" > api-image-uri.txt
 
 
       - name: upload image uri name file as an artifact
