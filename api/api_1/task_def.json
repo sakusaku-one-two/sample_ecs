@@ -1,0 +1,36 @@
+{
+    "containerDefinitions": [ 
+       { 
+          
+          "essential": true,
+          "image": "",
+          "logConfiguration": { 
+             "logDriver": "awslogs",
+             "options": { 
+                "awslogs-group" : "/ecs/fargate-task-definition",
+                "awslogs-region": "ap-northeast-1",
+                "awslogs-stream-prefix": "ecs"
+             }
+          },
+          "name": "sample_api",
+          "portMappings": [ 
+             { 
+                "containerPort": 8080,
+                "hostPort": 8080,
+                "protocol": "tcp"
+             }
+          ]
+       }
+    ],
+    "cpu": "256",
+    "executionRoleArn": "arn:aws:iam::012345678910:role/ecsTaskExecutionRole",
+    "family": "fargate-task-definition",
+    "memory": "512",
+    "networkMode": "awsvpc",
+    "runtimePlatform": {
+         "operatingSystemFamily": "LINUX"
+     },
+    "requiresCompatibilities": [ 
+        "FARGATE" 
+     ]
+ }
