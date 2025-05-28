@@ -82,7 +82,7 @@ jobs:
         id: login-ecr
       
       - name: docker iamge build
-        run: docker image build -t temp_api_image:latest .
+        run: docker image build -t sample_api:latest .
 
 
       - name: push api server image to ecr
@@ -90,9 +90,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITROY_NAME }}
         run: |
-          docker image tag temp_api_image:latest $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
-          echo "$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}" > api-image-uri.txt
+          docker image tag sample_api:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:latest" > api-image-uri.txt
 
 
 
