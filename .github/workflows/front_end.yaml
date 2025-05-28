@@ -82,7 +82,7 @@ jobs:
         id: login-ecr
       
       - name: docker iamge build
-        run: docker image build -t temp_api_a_image:latest .
+        run: docker image build -t temp_api_image:latest .
 
 
       - name: push api server image to ecr
