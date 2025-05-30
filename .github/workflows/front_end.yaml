@@ -49,6 +49,7 @@ jobs:
     - run: npm run build
     - run: ls -la dist/
     
+    
     - name: Upload to S3
       run: |
         aws s3 sync dist/ s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/dist
