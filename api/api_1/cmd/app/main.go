@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/internal/service"
 	"fmt"
 	"net/http"
 )
@@ -30,11 +31,15 @@ func main() {
 
 			fmt.Println("GET")
 
-			w.Write([]byte("GET メソッド！"))
+			w.Write([]byte(service.SampleFunction()))
 
 			return
 		}
 
+	})
+
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(200)
 	})
 
 	err := http.ListenAndServe(":8080", nil)
