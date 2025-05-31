@@ -30,7 +30,7 @@ func main() {
 
 			fmt.Println("GET")
 
-			w.Write([]byte("api response"))
+			w.Write([]byte("GET メソッド！"))
 
 			return
 		}
