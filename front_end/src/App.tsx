@@ -29,7 +29,7 @@ function App() {
   return (
     <>
       <div className=''>
-          POST --> {data}
+          POST {data}
           
       </div>
     </>
