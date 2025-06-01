@@ -55,7 +55,7 @@ jobs:
         aws s3 sync dist/ s3://${{ secrets.FRONT_END_UPLOAD_S3 }}/
 
     
-    - name: upload end 
+    - name: s3 upload end 
       run: |
         echo end upload
 
