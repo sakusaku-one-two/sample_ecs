@@ -15,6 +15,7 @@ func ReflectMessage(w http.ResponseWriter, r *http.Request) {
 	_, err := r.Body.Read(body_byte)
 	if err != nil {
 		w.Write([]byte("読み取りに失敗しました"))
+
 		return
 	}
 	w.Write(body_byte)
