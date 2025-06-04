@@ -11,7 +11,7 @@ function App() {
     const get = async () => {
       try {
         const result = await fetch(`${window.location.host}/api/`,{
-            method : "POST"
+            method : "GET"
         });
 
         const textData = await result.text();

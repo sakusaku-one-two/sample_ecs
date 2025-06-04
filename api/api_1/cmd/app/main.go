@@ -13,7 +13,7 @@ func main() {
 			var body_byte []byte
 			n, err := r.Body.Read(body_byte)
 			if err != nil {
-				fmt.Println("ERROR")
+				fmt.Println("ERROR read")
 				return
 			}
 
