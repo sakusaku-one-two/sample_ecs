@@ -37,7 +37,9 @@ function App() {
       });
 
       if (!res.ok) {
+        console.log("fiald http post request");
         throw new Error("faild http request");
+        
 
       }
 
