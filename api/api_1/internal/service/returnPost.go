@@ -21,6 +21,7 @@ func ToByte[T any](arg *T) ([]byte, error) {
 
 func PostRetrun(w http.ResponseWriter, r *http.Request) {
 	url := r.RequestURI
+	w.Header().Set("Content-Type", "application/json")
 
 	json_byte, err := ToByte[ResponseType](NewResonseType(url))
 
@@ -33,7 +34,5 @@ func PostRetrun(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(json_byte)
-
-	return
 
 }
