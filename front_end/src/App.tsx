@@ -55,7 +55,7 @@ function App() {
   return (
     <>
       <div className=''>
-          Getdata {data} PostData {postData}
+          Getdata {data} PostData {postData?.name}
           
       </div>
     </>
