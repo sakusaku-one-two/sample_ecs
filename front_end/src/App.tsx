@@ -16,7 +16,7 @@ function App() {
   useEffect(()=>{
     const get = async () => {
       try {
-        const result = await fetch("/api/",{
+        const result = await fetch('/api/',{
             method : "GET"
         });
 
@@ -29,7 +29,7 @@ function App() {
     };
 
     const Post = async () => {
-      const res= await fetch("/api/",{
+      const res= await fetch('/api/',{
         method : "POST",
         headers : {
           'Content-Type': 'application/json',
