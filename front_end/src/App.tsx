@@ -20,7 +20,7 @@ function App() {
             method : "GET"
         });
 
-        const textData = result.text();
+        const textData = await result.text();
         
         setData(`set data >>>>> ${textData}`)
       } catch(e:any) {
