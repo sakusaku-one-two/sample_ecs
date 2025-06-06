@@ -20,7 +20,8 @@ function App() {
             method : "GET"
         });
 
-        const textData = result.body;
+        const textData = result.text();
+        
         setData(`set data >>>>> ${textData}`)
       } catch(e:any) {
         setData("error");
