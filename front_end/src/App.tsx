@@ -22,7 +22,7 @@ function App() {
 
         const textData = await result.text();
         
-        setData(`set data >>>>> ${textData}`)
+        setData(`set get data >>>>> ${textData}`)
       } catch(e:any) {
         setData("error");
       }
