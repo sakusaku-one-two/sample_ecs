@@ -10,6 +10,7 @@ func main() {
 	http.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			fmt.Println("POST")
+
 			service.PostRetrun(w, r)
 			return
 		}
