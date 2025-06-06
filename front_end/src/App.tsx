@@ -29,24 +29,25 @@ function App() {
     };
 
     const Post = async () => {
-      const res= await fetch('/api/',{
-        method : "POST",
-        headers : {
-          'Content-Type': 'application/json',
+      try {
+        const res = await fetch('/api/', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!res.ok) {
+          console.log(`HTTP Error: ${res.status} ${res.statusText}`);
+          return; // エラー時は処理を中断
         }
-      });
 
-      if (!res.ok) {
-        console.log("fiald http post request");
-        throw new Error("faild http request");
-        
+        const data: ResultType = await res.json();
+        setPostData(data);
 
+      } catch (error) {
+        console.error('POST request failed:', error);
       }
-
-      const data:ResultType = await res.json();
-
-      setPostData(data);
-
     };
   
 
