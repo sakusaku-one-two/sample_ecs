@@ -43,6 +43,7 @@ function App() {
         }
 
         const data: ResultType = await res.json();
+        console.log(data);
         setPostData(data);
 
       } catch (error) {
