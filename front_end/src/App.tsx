@@ -59,7 +59,7 @@ function App() {
 
   return (
     <>
-      <div className=''>
+      <div className='border-gray-300 rounded bg-gray-100'>
           Getdata {data} PostData {postData?.name}
           <Button variant="outline" onClick={() => Post()}>POST</Button>
           
