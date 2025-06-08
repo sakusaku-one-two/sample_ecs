@@ -6,17 +6,26 @@ import (
 )
 
 type ResponseType struct {
-	name string
+	Name string `json:"name"`
 }
 
 func NewResonseType(url_address string) *ResponseType {
 	return &ResponseType{
-		name: url_address,
+		Name: url_address,
 	}
 }
 
 func ToByte[T any](arg *T) ([]byte, error) {
-	return json.Marshal(arg)
+	return json.Marshal(*arg)
+}
+
+func ByteTo[T any](arg []byte) (T, error) {
+	var data T
+
+	err := json.Unmarshal(arg, &data)
+
+	return data, err
+
 }
 
 func PostRetrun(w http.ResponseWriter, r *http.Request) {
