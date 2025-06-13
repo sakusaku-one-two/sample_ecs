@@ -1,0 +1,9 @@
+
+services:
+  redis_server:
+    image: redis:7.0-alpine
+    environment:
+      - REDIS_USERNAME=default
+      - REIDS_DB_NUM=0
+    ports:
+      - "6379:6379"
