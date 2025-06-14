@@ -103,7 +103,54 @@ jobs:
           path: api/api_1/api-image-uri.txt
 
 
-  deployTask:
+
+  build_to_ecr2:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api/api_2
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: start to ecr
+        run: echo start buidl and depoly to ecr
+
+      
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{env.AWS_ASSUME_ROLE_ARN}}
+          role-to-duration-seconds: 1800
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: login-ecr
+      
+      - name: docker iamge build
+        run: docker image build -t sample_api:latest .
+
+
+      - name: push api server image to ecr
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITROY_NAME_B }}
+        run: |
+          docker image tag sample_api:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:latest" > api-image-uri.txt
+
+
+
+      - name: upload image uri name file as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-image-uri
+          path: api/api_2/api-image-uri.txt
+
+
+
+  deployTask1:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -157,7 +204,5 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-        
 
-
-
+ 
