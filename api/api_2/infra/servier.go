@@ -31,7 +31,3 @@ func FactoryServer() *echo.Echo {
 
 	return SELF_ECHO_SERVER
 }
-
-func StartServer() {
-	SELF_ECHO_SERVER.Logger.Fatal(SELF_ECHO_SERVER.Start(SERVER_PORT))
-}

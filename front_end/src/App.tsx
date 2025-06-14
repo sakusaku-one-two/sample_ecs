@@ -8,7 +8,8 @@ interface ResultType {
 }
 
 function App() {
-  const [data, setData] = useState<string>("get dta");
+  const [add,setAdd] = useState<string>("");
+  const [data, setData] = useState<string[]>([]);
   const [postData,setPostData] = useState<ResultType|undefined>(undefined);
 
 
@@ -17,15 +18,14 @@ function App() {
   useEffect(()=>{
     const get = async () => {
       try {
-        const result = await fetch('/api/',{
-            method : "GET"
+        const result = await fetch('/api/all',{
+            method : "GET",
         });
 
-        const textData = await result.text();
-        
-        setData(`set get data >>>>> ${textData}`)
+        const textData = await result.json();
+        setData(textData.result)
       } catch(e:any) {
-        setData("error");
+        setData(["error"]);
       }
     };
     get()
@@ -34,7 +34,7 @@ function App() {
 
   const Post = async () => {
     try {
-      const res = await fetch('/api/', {
+      const res = await fetch('/api/add', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -61,6 +61,7 @@ function App() {
     <>
       <div className='border-gray-300 rounded bg-gray-100'>
           Getdata {data} requestURL is {postData?.name}
+          <input type="text" onChange={(e)=> setAdd(e.target.value) } value={add}/>
           <Button variant="outline" onClick={() => Post()}>POST</Button>
           
       </div>

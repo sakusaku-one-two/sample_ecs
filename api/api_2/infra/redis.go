@@ -66,6 +66,19 @@ func (rc *RedisClient) ConnectionComplite() bool {
 	return err == nil
 }
 
+func (rc *RedisClient) HealthCheck() bool {
+	ctx, cancel := context.WithTimeout(rc.ctx, 5*time.Second)
+	defer cancel()
+
+	if rc.client == nil {
+		fmt.Println("REDIS Client is none")
+		return false
+	}
+
+	_, err := rc.client.Ping(ctx).Result()
+	return err == nil
+}
+
 func (rc *RedisClient) Close() {
 	rc.client.Close()
 }
