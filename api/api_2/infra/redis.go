@@ -28,6 +28,7 @@ var (
 )
 
 func init() {
+	fmt.Println("REDIS ENV START")
 	redis_dns_name := util.GetEnv(ENV_KEY__REDIS_DNS_NAME, "localhost")
 	redis_port := util.GetEnv(ENV_KEY__REDIS_PORT, "6379")
 
@@ -46,6 +47,7 @@ func init() {
 type RedisClient struct {
 	client *redis.Client
 	ctx    context.Context
+	status bool
 }
 
 func (rc *RedisClient) Set(key string, val interface{}, ttl_count_by_minute int) bool {
@@ -92,6 +94,7 @@ func RedisConnectionsClose() {
 //--------------------------------------------------//
 
 func NewRedisClient() (*RedisClient, error) {
+	fmt.Println("NEW REDIS CLIENT CREATED")
 	client := redis.NewClient(&redis.Options{
 		Addr:     REDIS_ADDR,
 		DB:       REDIS_DB_NO,
@@ -102,6 +105,7 @@ func NewRedisClient() (*RedisClient, error) {
 	redis_clinet := &RedisClient{
 		client: client,
 		ctx:    ctx,
+		status: false,
 	}
 
 	CONNECTIONS = append(CONNECTIONS, redis_clinet)
