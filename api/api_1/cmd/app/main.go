@@ -27,6 +27,7 @@ func main() {
 
 	http.HandleFunc("/api/add", func(w http.ResponseWriter, r *http.Request) {
 		// redisに追加を行う　POSTのみ
+		fmt.Println("/api/add ::: redis add data")
 		if r.Method != "POST" {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
@@ -34,6 +35,7 @@ func main() {
 
 		response, err := http.Post(util.UrlCreate(env.TARGET_SERVICE_URL, "add"), "application/json", r.Body)
 		if err != nil {
+			fmt.Println("add faild::", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -41,7 +43,7 @@ func main() {
 		data, err := io.ReadAll(response.Body)
 		defer response.Body.Close()
 		if err != nil {
-
+			fmt.Println("add faild::", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -61,6 +63,7 @@ func main() {
 
 		resp, err := http.Get(util.UrlCreate(env.TARGET_SERVICE_URL, "all"))
 		if err != nil {
+			fmt.Println("all faild::", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -87,6 +90,8 @@ func main() {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
+
+		fmt.Println("/api/redis ::: 検証開始")
 
 		res, err := http.Get(env.TARGET_SERVICE_URL)
 		if err != nil {
