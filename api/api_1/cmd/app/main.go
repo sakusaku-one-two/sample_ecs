@@ -78,11 +78,11 @@ func main() {
 
 	})
 
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("api/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 	})
 
-	http.HandleFunc("/redis", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("api/redis", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusBadRequest)
 			return
