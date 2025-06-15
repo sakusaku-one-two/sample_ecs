@@ -21,6 +21,7 @@ func init() {
 	NAME_SPACE = u.GetEnv("NAME_SPACE", "")
 
 	if NAME_SPACE != "" {
+		// AWS ServiceConnect使用時のURL
 		TARGET_SERVICE_URL = fmt.Sprintf("http://%s.%s:%s", SERVICE_NAME, NAME_SPACE, TARGET_SERVICE_PORT)
 	} else {
 		TARGET_SERVICE_URL = fmt.Sprintf("http://localhost:%s", TARGET_SERVICE_PORT)

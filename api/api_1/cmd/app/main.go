@@ -82,6 +82,37 @@ func main() {
 		w.WriteHeader(200)
 	})
 
+	http.HandleFunc("/redis", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		res, err := http.Get(env.TARGET_SERVICE_URL)
+		if err != nil {
+			fmt.Println("そもそもredisserverと接続ができてない")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		real_ip, err := io.ReadAll(res.Body)
+		if err != nil {
+			fmt.Println("redis proxy serverがルートで返した値が取得できない")
+		}
+
+		fmt.Println(real_ip, "redis proxy serverのIP")
+
+		redis_server_url := util.UrlCreate(env.TARGET_SERVICE_URL, "health")
+		fmt.Println(redis_server_url, "ヘルスチェック実行")
+		data, err := http.Get(redis_server_url)
+		if err != nil {
+			fmt.Println("redisとの接続に問題があり", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(data.StatusCode)
+	})
+
 	err := http.ListenAndServe(env.SELF_SERVER_PORT, nil)
 	fmt.Println("doen server", err)
 }
