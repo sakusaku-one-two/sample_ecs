@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -117,6 +118,31 @@ func main() {
 		}
 		w.WriteHeader(data.StatusCode)
 	})
+
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+
+		for range ticker.C {
+			response, err := http.Get(env.TARGET_SERVICE_URL)
+			if err != nil {
+				fmt.Println("err =>", err.Error())
+				continue
+			}
+			body_data, err := io.ReadAll(response.Body)
+			response.Body.Close()
+			if err != nil {
+				fmt.Println("byte read ::", err.Error())
+				continue
+			}
+			fmt.Println(string(body_data))
+
+		}
+
+		defer func() {
+			ticker.Stop()
+		}()
+
+	}()
 
 	err := http.ListenAndServe(env.SELF_SERVER_PORT, nil)
 	fmt.Println("doen server", err)
