@@ -37,6 +37,8 @@ func init() {
 		util.GetEnv(ENV_KEY__REDIS_DB_NO, "0"),
 	)
 
+	fmt.Println("REIDS ADDR ::: ", REDIS_ADDR)
+
 	REDIS_PASSWORD = util.GetEnv(ENV_KEY__REDIS_PASSWORD, "")
 	REDIS_USERNAME = util.GetEnv(REDIS_USERNAME, "default")
 
@@ -101,12 +103,17 @@ func NewRedisClient() (*RedisClient, error) {
 		Password: REDIS_PASSWORD,
 		Username: REDIS_USERNAME,
 	})
+
 	ctx := context.Background()
 	redis_clinet := &RedisClient{
 		client: client,
 		ctx:    ctx,
 		status: false,
 	}
+
+	go func(client_redis *RedisClient) {
+		fmt.Println("redisとの接続を確認:::", client_redis.HealthCheck())
+	}(redis_clinet)
 
 	CONNECTIONS = append(CONNECTIONS, redis_clinet)
 	return redis_clinet, nil
