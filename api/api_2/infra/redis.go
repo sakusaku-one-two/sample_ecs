@@ -42,7 +42,7 @@ func init() {
 	fmt.Println("REIDS ADDR ::: ", REDIS_ADDR)
 
 	REDIS_PASSWORD = util.GetEnv(ENV_KEY__REDIS_PASSWORD, "")
-	REDIS_USERNAME = util.GetEnv(REDIS_USERNAME, "default")
+	REDIS_USERNAME = util.GetEnv(ENV_KEY__REIDS_USERNAME, "default")
 
 	CONNECTIONS = make([]*RedisClient, 0)
 
@@ -88,7 +88,6 @@ func (rc *RedisClient) HealthCheck() bool {
 	}
 
 	_, err := rc.client.Ping(ctx).Result()
-	fmt.Println("HealthCheck within", err.Error())
 	return err == nil
 }
 
@@ -97,8 +96,12 @@ func (rc *RedisClient) ConnectionErr() string {
 	ctx, cancel := context.WithTimeout(rc.NewContext(), wati_time)
 	defer cancel()
 	err := rc.client.Ping(ctx).Err()
-	fmt.Println("redis to Ping ConnectionErr", err.Error())
-	return err.Error()
+	if err != nil {
+		fmt.Println("redis to Ping ConnectionErr", err.Error())
+		return err.Error()
+	}
+
+	return "OK"
 }
 
 func (rc *RedisClient) Close() {
@@ -121,10 +124,12 @@ func NewRedisClient() (*RedisClient, error) {
 		Password: REDIS_PASSWORD,
 		Username: REDIS_USERNAME,
 		OnConnect: func(ctx context.Context, cn *redis.Conn) error {
-			fmt.Println("ValKeyとの接続が完了しました。")
+			fmt.Println("valkey接続完了")
 			return nil
 		},
-		TLSConfig: &tls.Config{},
+		TLSConfig:    &tls.Config{},
+		PoolSize:     10,
+		MinIdleConns: 5,
 	})
 
 	ctx := context.Background()
