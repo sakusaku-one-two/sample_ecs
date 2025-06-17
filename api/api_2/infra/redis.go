@@ -58,7 +58,8 @@ func (rc *RedisClient) Set(key string, val interface{}, ttl_count_by_minute int)
 }
 
 func (rc *RedisClient) Get(key string) (string, error) {
-	return rc.client.Get(rc.ctx, key).Result()
+	ctx := context.Background()
+	return rc.client.Get(ctx, key).Result()
 }
 
 func (rc *RedisClient) GetClient() *redis.Client {
@@ -71,7 +72,7 @@ func (rc *RedisClient) ConnectionComplite() bool {
 }
 
 func (rc *RedisClient) HealthCheck() bool {
-	ctx, cancel := context.WithTimeout(rc.ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(rc.ctx, 5*time.Minute)
 	defer cancel()
 
 	if rc.client == nil {
