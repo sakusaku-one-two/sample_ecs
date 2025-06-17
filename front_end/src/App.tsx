@@ -7,7 +7,18 @@ interface ResultType {
   name :string
 }
 
+const redisChecker = async (callback) => {
+  try {
+    const reponse = await fetch("/api/redis");
+    const data = await reponse.json();
+    callback(data);
+  } catch (e:any) {
+    callback(e.message as string);
+  }
+}
+
 function App() {
+  const [reidsState,setRedisState] = useState<string>("");
   const [add,setAdd] = useState<string>("");
   const [data, setData] = useState<string[]>([]);
   const [postData,setPostData] = useState<ResultType|undefined>(undefined);
@@ -63,6 +74,8 @@ function App() {
           Getdata {data} requestURL is {postData?.name}
           <input type="text" onChange={(e)=> setAdd(e.target.value) } value={add}/>
           <Button variant="outline" onClick={() => Post()}>POST</Button>
+          {reidsState}
+          <Button onClick={() => redisChecker(setRedisState)} />
           
       </div>
     </>
