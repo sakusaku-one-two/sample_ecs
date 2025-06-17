@@ -31,8 +31,12 @@ func init() {
 	fmt.Println("REDIS ENV START")
 	redis_dns_name := util.GetEnv(ENV_KEY__REDIS_DNS_NAME, "localhost")
 	redis_port := util.GetEnv(ENV_KEY__REDIS_PORT, "6379")
+	if redis_dns_name != "localhost" {
+		REDIS_ADDR = fmt.Sprintf("https://%s:%s", redis_dns_name, redis_port)
+	} else {
+		REDIS_ADDR = fmt.Sprintf("%s:%s", redis_dns_name, redis_port)
+	}
 
-	REDIS_ADDR = fmt.Sprintf("%s:%s", redis_dns_name, redis_port)
 	REDIS_DB_NO = util.ToInt(
 		util.GetEnv(ENV_KEY__REDIS_DB_NO, "0"),
 	)
