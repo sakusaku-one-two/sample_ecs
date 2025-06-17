@@ -7,7 +7,7 @@ interface ResultType {
   name :string
 }
 
-const redisChecker = async (callback) => {
+const redisChecker = async (callback:Function) => {
   try {
     const reponse = await fetch("/api/redis");
     const data = await reponse.json();
