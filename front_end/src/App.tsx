@@ -15,7 +15,20 @@ const redisChecker = async (callback:Function) => {
   } catch (e:any) {
     callback(e.message as string);
   }
-}
+};
+
+const get = async (setterCallBack:Function) => {
+  try {
+    const result = await fetch('/api/all',{
+        method : "GET",
+    });
+
+    const textData = await result.json();
+    setterCallBack(textData.result)
+  } catch(e:any) {
+    setterCallBack(["error"]);
+  }
+};
 
 function App() {
   const [reidsState,setRedisState] = useState<string>("");
@@ -27,19 +40,8 @@ function App() {
 
 
   useEffect(()=>{
-    const get = async () => {
-      try {
-        const result = await fetch('/api/all',{
-            method : "GET",
-        });
-
-        const textData = await result.json();
-        setData(textData.result)
-      } catch(e:any) {
-        setData(["error"]);
-      }
-    };
-    get()
+    
+    get(setData)
     
   },[]);
 
@@ -73,11 +75,27 @@ function App() {
   return (
     <>
       <div className='border-gray-300 rounded bg-gray-100'>
-          Getdata {data} requestURL is {postData?.name}
+         
           <input type="text" onChange={(e)=> setAdd(e.target.value) } value={add}/>
-          <Button variant="outline" onClick={() => Post()}>POST</Button>
+          <Button variant="outline" onClick={() =>{
+            Post();
+            setAdd("");
+          } }>POST</Button>
           {reidsState}
           <Button onClick={() => redisChecker(setRedisState)} />
+            <div className='flex flex-col'>
+                {
+                  data.map((value,index) => {
+                    return (
+                      <div key={index} className='rounded bg-gray-300'>
+                          {value}
+                      </div>
+                    )
+                  })
+                }
+
+            </div>
+         
           
       </div>
     </>
