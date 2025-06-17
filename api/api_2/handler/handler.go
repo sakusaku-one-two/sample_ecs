@@ -54,6 +54,7 @@ func (h *Handler) root(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string][]string{
 			"error": {err.Error()},
+			"where": {"root handler is it"},
 		})
 	}
 
@@ -77,7 +78,7 @@ func (h *Handler) AllRedisData(c echo.Context) error {
 	fmt.Println("GET ALL REDIS DATA")
 	// redis の情報を全て取得する
 	client := h.redis_clinet.GetClient()
-	all_data, err := client.LRange(context.Background(), LIST_KEY, 0, -1).Result()
+	all_data, err := client.LRange(h.redis_clinet.NewContext(), LIST_KEY, 0, -1).Result()
 	if err != nil {
 		fmt.Println("FIALD GET ALL REDIS DATA")
 		return c.JSON(http.StatusInternalServerError, map[string]string{

@@ -66,13 +66,18 @@ func (rc *RedisClient) GetClient() *redis.Client {
 	return rc.client
 }
 
+func (rc *RedisClient) NewContext() context.Context {
+	return context.Background()
+}
+
 func (rc *RedisClient) ConnectionComplite() bool {
-	err := rc.client.Ping(rc.ctx).Err()
+
+	err := rc.client.Ping(rc.NewContext()).Err()
 	return err == nil
 }
 
 func (rc *RedisClient) HealthCheck() bool {
-	ctx, cancel := context.WithTimeout(rc.ctx, 5*time.Minute)
+	ctx, cancel := context.WithTimeout(rc.NewContext(), 50*time.Minute)
 	defer cancel()
 
 	if rc.client == nil {
@@ -82,6 +87,14 @@ func (rc *RedisClient) HealthCheck() bool {
 
 	_, err := rc.client.Ping(ctx).Result()
 	return err == nil
+}
+
+func (rc *RedisClient) ConnectionErr() string {
+	wati_time := 30 * time.Second
+	ctx, cancel := context.WithTimeout(rc.NewContext(), wati_time)
+	defer cancel()
+	err := rc.client.Ping(ctx).Err()
+	return err.Error()
 }
 
 func (rc *RedisClient) Close() {
