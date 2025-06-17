@@ -41,7 +41,7 @@ func NewHandler() *Handler {
 // -------------GET----------------//
 func (h *Handler) root(c echo.Context) error {
 	fmt.Println("root called")
-	self_ip := c.RealIP()
+
 	var redis_status string
 	if h.redis_clinet.HealthCheck() {
 		redis_status = "OK"
@@ -51,18 +51,22 @@ func (h *Handler) root(c echo.Context) error {
 
 	ctx := context.Background()
 	all_data, err := h.redis_clinet.GetClient().LRange(ctx, LIST_KEY, 0, -1).Result()
+
 	if err != nil {
+		fmt.Println("redis err", err.Error())
 		return c.JSON(http.StatusInternalServerError, map[string][]string{
 			"error": {err.Error()},
 			"where": {"root handler is it"},
 		})
 	}
 
-	return c.JSON(http.StatusOK, map[string][]string{
-		"self_ip":      {self_ip},
+	return_map := map[string][]string{
 		"redis_status": {redis_status},
-		"redis_data":   all_data,
-	})
+		"reids_all":    all_data,
+	}
+	fmt.Println("root handler ok =>", return_map)
+
+	return c.JSON(http.StatusOK, return_map)
 
 }
 func (h *Handler) healthCheck(c echo.Context) error {
