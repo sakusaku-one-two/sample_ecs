@@ -93,7 +93,9 @@ function App() {
                     )
                   })
                 }
-
+                {
+                  postData?.name
+                }
             </div>
          
           
