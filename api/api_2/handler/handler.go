@@ -42,9 +42,25 @@ func NewHandler() *Handler {
 func (h *Handler) root(c echo.Context) error {
 	fmt.Println("root called")
 	self_ip := c.RealIP()
+	var redis_status string
+	if h.redis_clinet.HealthCheck() {
+		redis_status = "OK"
+	} else {
+		redis_status = "No"
+	}
 
-	return c.JSON(http.StatusOK, map[string]string{
-		"self_ip": self_ip,
+	ctx := context.Background()
+	all_data, err := h.redis_clinet.GetClient().LRange(ctx, LIST_KEY, 0, -1).Result()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string][]string{
+			"error": {err.Error()},
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string][]string{
+		"self_ip":      {self_ip},
+		"redis_status": {redis_status},
+		"redis_data":   all_data,
 	})
 
 }

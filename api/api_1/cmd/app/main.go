@@ -120,7 +120,7 @@ func main() {
 	})
 
 	go func() {
-		ticker := time.NewTicker(30 * time.Second)
+		ticker := time.NewTicker(30 * time.Minute) // 30分おきに後続のredis serverとの接続をかくにんする
 
 		for range ticker.C {
 			response, err := http.Get(env.TARGET_SERVICE_URL)
