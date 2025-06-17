@@ -2,6 +2,7 @@ package infra
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"module/util"
 	"time"
@@ -54,12 +55,12 @@ type RedisClient struct {
 }
 
 func (rc *RedisClient) Set(key string, val interface{}, ttl_count_by_minute int) bool {
-	err := rc.client.Set(rc.ctx, key, val, time.Minute*time.Duration(ttl_count_by_minute))
+	err := rc.client.Set(rc.NewContext(), key, val, time.Minute*time.Duration(ttl_count_by_minute))
 	return err == nil
 }
 
 func (rc *RedisClient) Get(key string) (string, error) {
-	ctx := context.Background()
+	ctx := rc.NewContext()
 	return rc.client.Get(ctx, key).Result()
 }
 
@@ -87,6 +88,7 @@ func (rc *RedisClient) HealthCheck() bool {
 	}
 
 	_, err := rc.client.Ping(ctx).Result()
+	fmt.Println("HealthCheck within", err.Error())
 	return err == nil
 }
 
@@ -95,6 +97,7 @@ func (rc *RedisClient) ConnectionErr() string {
 	ctx, cancel := context.WithTimeout(rc.NewContext(), wati_time)
 	defer cancel()
 	err := rc.client.Ping(ctx).Err()
+	fmt.Println("redis to Ping ConnectionErr", err.Error())
 	return err.Error()
 }
 
@@ -117,6 +120,11 @@ func NewRedisClient() (*RedisClient, error) {
 		DB:       REDIS_DB_NO,
 		Password: REDIS_PASSWORD,
 		Username: REDIS_USERNAME,
+		OnConnect: func(ctx context.Context, cn *redis.Conn) error {
+			fmt.Println("ValKeyとの接続が完了しました。")
+			return nil
+		},
+		TLSConfig: &tls.Config{},
 	})
 
 	ctx := context.Background()
